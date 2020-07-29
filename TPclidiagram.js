@@ -30,6 +30,9 @@ var Type = /** @class */ (function () {
     Type.prototype.getTypee = function () {
         return this.type;
     };
+    Type.prototype.getDescription = function () {
+        return this.description;
+    };
     return Type;
 }());
 var Command = /** @class */ (function () {
@@ -56,11 +59,11 @@ var fileTypes = fs.readFileSync("tipos.txt", "utf-8");
 var arrayFileTypes = fileTypes.split("\r\n");
 var fileCommands = fs.readFileSync("comandos.txt", "utf-8");
 var arrayFileCommands = fileCommands.split("\r\n");
-//console.log(arrayTypes);
 //console.log(arrayCommands);
 ////// Crear los objetos de las Clases Comandos y tipos
-var objTypes = new Type(makeObjTypes(arrayFileTypes));
-var objCommands = new Type(makeObjTypes(arrayFileTypes));
+var objTypes = makeObjTypes(arrayFileTypes);
+//let objCommands : Type = new Type(makeObjTypes(arrayFileTypes));
+//console.log(objTypes);
 function makeObjTypes(array) {
     var arrayTypes = [];
     for (var position = 0; position < array.length; position++) {
@@ -72,4 +75,15 @@ function makeObjTypes(array) {
         arrayTypes[position] = newType;
     }
     return arrayTypes;
+}
+var option = readKey.questionInt("Introduzca la opcion: ");
+makeTypeDiagram(objTypes);
+function makeTypeDiagram(arrayT) {
+    for (var i = 0; i < arrayT.length; i++) {
+        var typeCliDiagram = new Diagram()
+            .box(arrayT[i].getTypee())
+            .arrow(['-->'])
+            .box(arrayT[i].getDescription());
+        console.log(typeCliDiagram.draw());
+    }
 }

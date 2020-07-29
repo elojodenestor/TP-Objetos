@@ -18,6 +18,11 @@ class Type {
     public getTypee(): string {
         return this.type;
     }
+    
+    public getDescription(): string {
+        return this.description;
+    }
+
 }
 
 class Command {
@@ -57,14 +62,15 @@ let fileTypes : string = fs.readFileSync("tipos.txt","utf-8");
 let arrayFileTypes : string[] = fileTypes.split("\r\n");
 let fileCommands : string = fs.readFileSync("comandos.txt","utf-8");
 let arrayFileCommands : string[] = fileCommands.split("\r\n");
-//console.log(arrayTypes);
+
 //console.log(arrayCommands);
 
 
 ////// Crear los objetos de las Clases Comandos y tipos
 
-let objTypes : Type = new Type(makeObjTypes(arrayFileTypes))
-let objCommands : Type = new Type(makeObjTypes(arrayFileTypes))
+let objTypes : Type[] = makeObjTypes(arrayFileTypes);
+//let objCommands : Type = new Type(makeObjTypes(arrayFileTypes));
+//console.log(objTypes);
 
 function makeObjTypes(array : string[]) : Type[] {
     let arrayTypes : Type[] = [];
@@ -80,3 +86,17 @@ function makeObjTypes(array : string[]) : Type[] {
     return arrayTypes;
 }
 
+let option : number = readKey.questionInt("Introduzca la opcion: ");
+makeTypeDiagram(objTypes);
+
+function makeTypeDiagram(arrayT : Type[]) {  
+    for (let i : number = 0; i < arrayT.length; i++){
+        const typeCliDiagram = new Diagram()
+            .box(arrayT[i].getTypee())
+            .arrow(['-->'])
+            .box(arrayT[i].getDescription());
+    
+ 
+        console.log(typeCliDiagram.draw()); 
+    }
+}
