@@ -1,0 +1,3 @@
+sentencia, en una instruccion que permite el control de flujo. Ej: Condicional - Bucle
+funcion, comando que realiza una tarea especifica, puede recibir argumento(s)
+parametro, valor que recibe una funcion
