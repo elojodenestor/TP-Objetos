@@ -1,0 +1,8 @@
+while,  es un bucle que se ejecuta mientras la condición sea verdadera, sentencia
+if, permite evaluar una o varias condiciones y ejecutar acciones acordes, sentencia
+for, bucle que permite iterar sobre los items de cualquier secuencia, en el orden que aparecen, sentencia
+range(), permite iterar sobre una secuencia de numeros, funcion
+pass, no hace nada. Se puede usar cuando una sentencia es requerida por la sintaxis pero el programa no requiere ninguna accion, sentencia
+break, termina el bucle for o while más anidado, sentencia
+print, escribe el valor de los argumentos que se le dan, funcion
+end, puede usarse para evitar el salto de linea al final de la salida en un 'print', parametro

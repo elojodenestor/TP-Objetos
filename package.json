@@ -1,0 +1,25 @@
+{
+  "name": "tp-objetos",
+  "version": "1.0.0",
+  "description": "---",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elojodenestor/TP-Objetos.git"
+  },
+  "author": "nestor luis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elojodenestor/TP-Objetos/issues"
+  },
+  "homepage": "https://github.com/elojodenestor/TP-Objetos#readme",
+  "dependencies": {
+    "@types/node": "^14.0.26",
+    "@types/readline-sync": "^1.4.3",
+    "cli-diagram": "^0.3.0",
+    "readline-sync": "^1.4.10"
+  }
+}
