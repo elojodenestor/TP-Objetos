@@ -19,9 +19,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var Diagram = require("cli-diagram");
 var readKey = require('readline-sync');
 var fs = __importStar(require("fs"));
-//////////////////////////////////////////////////////// Clases
+///////////////////////////////////////////////////////////////////// Clases
 var Type = /** @class */ (function () {
     function Type(type, description) {
         this.type = type;
@@ -32,6 +33,9 @@ var Type = /** @class */ (function () {
     };
     Type.prototype.getDescription = function () {
         return this.description;
+    };
+    Type.EmptyType = function () {
+        return new Type("", "");
     };
     return Type;
 }());
@@ -44,26 +48,21 @@ var Command = /** @class */ (function () {
     Command.prototype.getCommand = function () {
         return this.command;
     };
+    Command.prototype.getDescription = function () {
+        return this.description;
+    };
+    Command.prototype.getTypeComm = function () {
+        return this.type;
+    };
     return Command;
 }());
-/////////////////// Box
-var Diagram = require('cli-diagram');
-var myHeadPy = new Diagram()
-    .box("  Lenguaje Python  ");
-console.log(myHeadPy.draw());
-var myOptions = new Diagram()
-    .box("      OPCIONES     \n[1] Ver Tipos\n[2] Ver Comandos\n[3] Salir");
-console.log(myOptions.draw());
-//let option : number = readKey.questionInt("Introduzca la opcion: ");
 var fileTypes = fs.readFileSync("tipos.txt", "utf-8");
 var arrayFileTypes = fileTypes.split("\r\n");
 var fileCommands = fs.readFileSync("comandos.txt", "utf-8");
 var arrayFileCommands = fileCommands.split("\r\n");
-//console.log(arrayCommands);
-////// Crear los objetos de las Clases Comandos y tipos
+/////////////////////////////////////////////////////// Crear los objetos de las Clases Comandos y tipos
 var objTypes = makeObjTypes(arrayFileTypes);
-//let objCommands : Type = new Type(makeObjTypes(arrayFileTypes));
-//console.log(objTypes);
+var objCommands = makeObjCommand(arrayFileCommands);
 function makeObjTypes(array) {
     var arrayTypes = [];
     for (var position = 0; position < array.length; position++) {
@@ -76,8 +75,30 @@ function makeObjTypes(array) {
     }
     return arrayTypes;
 }
-var option = readKey.questionInt("Introduzca la opcion: ");
-makeTypeDiagram(objTypes);
+function makeObjCommand(array) {
+    var arrayCommands = [];
+    for (var position = 0; position < array.length; position++) {
+        var arrayTemp = [];
+        arrayTemp = array[position].split(",");
+        var c = arrayTemp[0]; //Command
+        var d = arrayTemp[1]; //Description
+        var t = FindType(arrayTemp[2], objTypes); //Type
+        var newCommand = new Command(c, d, t);
+        arrayCommands[position] = newCommand;
+    }
+    return arrayCommands;
+    function FindType(t, arrayT) {
+        var thisType = Type.EmptyType();
+        for (var i = 0; i < arrayT.length; i++) {
+            var TypeTemp = arrayT[i];
+            if (t == TypeTemp.getTypee()) {
+                thisType = TypeTemp;
+            }
+        }
+        return thisType;
+    }
+}
+//////////////////////////////////////////////////////////////// Hacer los Diagramas
 function makeTypeDiagram(arrayT) {
     for (var i = 0; i < arrayT.length; i++) {
         var typeCliDiagram = new Diagram()
@@ -86,4 +107,48 @@ function makeTypeDiagram(arrayT) {
             .box(arrayT[i].getDescription());
         console.log(typeCliDiagram.draw());
     }
+    var goBack = readKey.question("Presione [ENTER] para volver al menu");
+    menu();
 }
+function makeCommandsDiagram(arrayC) {
+    for (var i = 0; i < arrayC.length; i++) {
+        var innerCommandCliDiagram = new Diagram()
+            .box(arrayC[i].getCommand())
+            .arrow(['-->'])
+            .box(arrayC[i].getDescription());
+        var outerCommandCliDiagram = new Diagram()
+            .box(arrayC[i].getTypeComm().getTypee() + "\n" + innerCommandCliDiagram);
+        console.log(outerCommandCliDiagram.draw());
+    }
+    var goBack = readKey.question("Presione [ENTER] para volver al menu");
+    menu();
+}
+///////////////////////////////////////////////////////////////////////////// M E N U 
+function menu() {
+    var Diagram = require('cli-diagram');
+    var myHeadPy = new Diagram()
+        .box("  Lenguaje Python  ");
+    console.log(myHeadPy.draw());
+    var myOptions = new Diagram()
+        .box("      OPCIONES     \n[1] Ver Tipos\n[2] Ver Comandos\n[3] Salir");
+    console.log(myOptions.draw());
+    var option = readKey.questionInt("Introduzca la opcion: ");
+    validateOp(option);
+}
+function validateOp(option) {
+    switch (option) {
+        case 1:
+            makeTypeDiagram(objTypes);
+            return;
+        case 2:
+            makeCommandsDiagram(objCommands);
+            return;
+        case 3:
+            console.log("¡Hasta luego!");
+            return;
+        default:
+            console.log("Opcion incorrecta, elija una las opciones entre [ ]");
+            return;
+    }
+}
+menu();
